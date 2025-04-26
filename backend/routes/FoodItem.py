@@ -82,6 +82,7 @@ def get_recipe_from_chatgpt(ingredients):
             "recipes": [
                 {{
                     "recipeName": "...",
+                    "recipeDescription": "...",
                     "ingredients": [
                         {{"name": "...", "quantity": "...", "unit": "..."}},
                         {{"name": "...", "quantity": "...", "unit": "..."}}
