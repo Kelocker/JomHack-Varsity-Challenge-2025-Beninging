@@ -1,4 +1,4 @@
-from openai import OpenAI
+import openai
 import os
 from flask import jsonify
 import json
@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv('API_KEY'))
+openai.api_key = os.getenv('OPEN_AI_API')
 
 def build_input_prompt(food_items) -> str:
     return f"""
@@ -23,7 +23,7 @@ Example output for [{{"foodName": "Apple", "quantity": 10, "measurementUnit": "-
 
 def generate_recommendations(food_items):
     prompt = build_input_prompt(food_items)
-    response = client.chat.completions.create(
+    response = openai.ChatCompletion.create(
         model="gpt-4-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
