@@ -11,7 +11,7 @@ from openai import OpenAI
 load_dotenv()
 
 # Now you can access your environment variables using os.environ
-os.environ['OPENAI_API_KEY'] = os.environ.get("API_KEY")
+os.environ['OPENAI_API_KEY'] = os.environ.get("OPEN_AI_API")
 
 # Initialize the OpenAI client
 client = OpenAI()
@@ -128,9 +128,9 @@ def image_to_food_list(file_path):
 
     # Make the API Call
     response = client.chat.completions.create(
-        model="gpt-4o", # Or use "gpt-4-turbo"
+        model="gpt-4", 
         messages=messages_payload,
-        max_tokens=800
+        max_tokens=1000
     )
 
     ai_response = response.choices[0].message.content
