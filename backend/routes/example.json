@@ -1,0 +1,67 @@
+{
+    "data": [
+        {
+            "foodName": "Apple",
+            "quantity": 10,
+            "measurementUnit": "-",
+            "expiryDate": "2025-05-02",
+            "category": "Fruit"
+        },
+        {
+            "foodName": "Sugar",
+            "quantity": 50,
+            "measurementUnit": "gram",
+            "expiryDate": "2025-05-02",
+            "category": "condiments"
+        },
+        {
+            "foodName": "Soy sauce",
+            "quantity": 500,
+            "measurementUnit": "ml",
+            "expiryDate": "2025-05-02",
+            "category": "condiments"
+        },
+        {
+            "foodName": "Bananas",
+            "quantity": 6,
+            "measurementUnit": "pieces",
+            "expiryDate": "2025-07-15",
+            "category": "Fruits"
+        },
+        {
+            "foodName": "Beef",
+            "quantity": 1,
+            "measurementUnit": "kg",
+            "expiryDate": "2025-09-10",
+            "category": "Meat"
+        },
+        {
+            "foodName": "Pasta",
+            "quantity": 500,
+            "measurementUnit": "grams",
+            "expiryDate": "2025-05-20",
+            "category": "Grains"
+        },
+        {
+            "foodName": "Olive Oil",
+            "quantity": 300,
+            "measurementUnit": "ml",
+            "expiryDate": "2025-08-05",
+            "category": "Condiments"
+        },
+        {
+            "foodName": "Tomato Sauce",
+            "quantity": 250,
+            "measurementUnit": "ml",
+            "expiryDate": "2025-06-30",
+            "category": "Condiments"
+        },
+        {
+            "foodName": "Garlic",
+            "quantity": 3,
+            "measurementUnit": "bulbs",
+            "expiryDate": "2025-10-01",
+            "category": "Vegetables"
+        }
+    ]
+}
