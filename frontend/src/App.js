@@ -6,6 +6,8 @@ import Scan from './pages/Scan.jsx';
 import Impact from './pages/Impact.jsx';
 import Account from './pages/Account.jsx';
 import Recipe from './pages/Recipe.jsx';
+import Manage from './pages/Manage.jsx';
+
 
 import langDict from './utils/lang';
 
@@ -62,6 +64,7 @@ function App() {
           goBackHome={() => setPage('home')}
         />
       );
+      case 'manage': return <Manage setPage={setPage}/>;
       default: return <Home lang={lang} />;
     }
   };
