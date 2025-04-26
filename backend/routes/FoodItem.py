@@ -1,10 +1,11 @@
 from datetime import datetime
 from flask import Blueprint, jsonify, json
 from dotenv import load_dotenv
-import openai 
+import openai
 import os
 import requests
-from concurrent.futures import ThreadPoolExecutor
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 load_dotenv()
 
@@ -71,56 +72,75 @@ def fetch_food_image(food_name):
         print(f"Error fetching image for {food_name}: {e}")
         return ""
 
-def get_recipe_from_chatgpt(ingredients):
+def get_recipe_from_chatgpt(ingredients, retries=2):
     prompt = f"""
-        Give me multiple simple recipes using the following ingredients: {', '.join(ingredients)}.
-        The count of the recipe you return must be more than 5. 
-        Prioritize using the ingredients listed earlier.
+        You are a smart cooking assistant.
 
-        Please return the response in the following JSON format:
+        Here are the ingredients: {', '.join(ingredients)}.
+
+        Return 5 or more simple recipes, prioritize using these ingredients.
+
+        IMPORTANT:
+        - ONLY return a VALID JSON object.
+        - NO explanations, no comments, no extra text.
+        - Structure must be exactly like:
+
         {{
             "recipes": [
                 {{
                     "recipeName": "...",
                     "recipeDescription": "...",
                     "ingredients": [
-                        {{"name": "...", "quantity": "...", "unit": "..."}},
                         {{"name": "...", "quantity": "...", "unit": "..."}}
                     ],
                     "skillLevel": "...",
                     "timeRequired": "...",
-                    "instructions": [
-                        "Step 1", "Step 2", "Step 3"
-                    ],
-                    "imageUrl": "..."
+                    "instructions": ["Step 1", "Step 2"],
+                    "imageUrl": "Leave empty string, will be filled later"
                 }}
             ]
         }}
     """
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.7,
-            max_tokens=2000
-        )
-        recipe_info = response.choices[0].message['content'].strip()
-        recipe_data = json.loads(recipe_info)
 
-        recipes = recipe_data.get("recipes", [])
+    for attempt in range(retries + 1):
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=2000
+            )
 
-        # Fetch images in parallel
-        futures = {executor.submit(fetch_food_image, recipe.get("recipeName", "food")): recipe for recipe in recipes}
-        for future in futures:
-            recipe = futures[future]
-            image_url = future.result()
-            recipe["imageUrl"] = image_url
+            recipe_info = response.choices[0].message['content'].strip()
 
-        return recipe_data
+            # Attempt to load JSON
+            recipe_data = json.loads(recipe_info)
 
-    except Exception as e:
-        print(f"Error fetching recipes: {e}")
-        return {"error": f"Error fetching recipe: {str(e)}"}
+            recipes = recipe_data.get("recipes", [])
+
+            # Fetch images in parallel
+            futures = {executor.submit(fetch_food_image, recipe.get("recipeName", "food")): recipe for recipe in recipes}
+            for future in as_completed(futures):
+                recipe = futures[future]
+                try:
+                    image_url = future.result()
+                    recipe["imageUrl"] = image_url
+                except Exception as e:
+                    print(f"Image fetch error: {e}")
+                    recipe["imageUrl"] = ""
+
+            return recipe_data
+
+        except json.JSONDecodeError as e:
+            print(f"[Attempt {attempt+1}] JSON decode error: {e}")
+            if attempt < retries:
+                time.sleep(1)  # Wait a bit and retry
+                continue
+            else:
+                return {"error": f"Failed to decode GPT response after {retries+1} tries."}
+        except Exception as e:
+            print(f"Error fetching recipes: {e}")
+            return {"error": f"Error fetching recipe: {str(e)}"}
 
 @recipe.route('/recipe', methods=['GET'])
 def get_recipe():
