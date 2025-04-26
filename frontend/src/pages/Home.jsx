@@ -21,30 +21,45 @@ const Home = ({ lang, setPage }) => {
 
   const extract_data = async () => {
     try {
-      const table = document.querySelector('table');
-      const rows = table.querySelectorAll('tbody tr');
-
-      const extractedData = Array.from(rows).map(row => {
-        const cells = row.querySelectorAll('td');
+      const items = document.querySelectorAll('.summary-item');
+      if (!items.length) {
+        console.error('No summary items found!');
+        alert('No items to extract!');
+        return;
+      }
+  
+      const extractedData = Array.from(items).map(item => {
+        const foodName = item.querySelector('.food-name')?.textContent || '';
+        const detail = item.querySelector('.food-detail')?.textContent || '';
+        const category = item.querySelector('.category')?.textContent || '';
+  
+        const [expiryDateRaw, quantityRaw] = detail.split('@').map(str => str.trim());
+        let [quantity, unit] = quantityRaw.split(' ');
+        quantity = parseInt(quantity) || 0;
+        unit = unit || '';
+  
         return {
-          foodName: cells[0].textContent,
-          quantity: parseInt(cells[1].textContent),
-          measurementUnit: cells[2].textContent,
-          expiryDate: cells[3].textContent,
-          category: cells[4].textContent
+          foodName,
+          quantity,
+          measurementUnit: unit,
+          expiryDate: expiryDateRaw,
+          category
         };
       });
-
+  
       console.log("Extracted data:", extractedData);
+  
       const response = await axios.post('http://localhost:5000/api/extract', { data: extractedData });
       console.log("Response from backend:", response.data);
       alert(`Summary extracted successfully! Check console for details.`);
-      
+  
     } catch (error) {
       console.error('Error:', error);
       alert('Failed to extract summary');
     }
   };
+  
+  
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/hello')
@@ -118,7 +133,7 @@ const Home = ({ lang, setPage }) => {
             <div className="summary-item">
               <div className="summary-left">
                 <div className="food-name">Apple</div>
-                <div className="food-detail">2023-12-31 @ 10</div>
+                <div className="food-detail">2023-12-31 @ 10 -</div>
               </div>
               <div className="category">Fruit</div>
             </div>
