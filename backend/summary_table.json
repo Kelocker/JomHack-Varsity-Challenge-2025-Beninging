@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "foodName": "Apple",
+            "quantity": 10,
+            "measurementUnit": "-",
+            "expiryDate": "2023-12-31",
+            "category": "Fruit"
+        },
+        {
+            "foodName": "Sugar",
+            "quantity": 50,
+            "measurementUnit": "gram",
+            "expiryDate": "2024-01-15",
+            "category": "Condiments"
+        },
+        {
+            "foodName": "Soy Sauce",
+            "quantity": 500,
+            "measurementUnit": "ml",
+            "expiryDate": "2024-01-15",
+            "category": "Condiments"
+        }
+    ]
+}
