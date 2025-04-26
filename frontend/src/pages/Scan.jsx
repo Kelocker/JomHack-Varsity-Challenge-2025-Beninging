@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import scanIcon from '../utils/icons/camera.png';
 
-const Scan = ({ setCameraMode, cameraMode, goBack }) => {
+const Scan = ({ setCameraMode, cameraMode, goBack, lang }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [tab, setTab] = useState('camera'); // camera | library
@@ -58,10 +58,10 @@ const Scan = ({ setCameraMode, cameraMode, goBack }) => {
         body: JSON.stringify({ image: base64Image })
       });
       const data = await res.json();
-      setResponse(data.result || 'No items detected.');
+      setResponse(data.result || lang.scanPage.noItems);
     } catch (err) {
       console.error('Error sending image:', err);
-      setResponse('Something went wrong.');
+      setResponse(lang.scanPage.error);
     }
   };
 
@@ -100,7 +100,7 @@ const Scan = ({ setCameraMode, cameraMode, goBack }) => {
           goBack();
         }} style={styles.backBtn}>←</button>
 
-          <span style={styles.headerText}>Scan</span>
+        <span style={styles.headerText}>{lang.scanPage.scan}</span>
         </div>
       )}
 
@@ -117,7 +117,7 @@ const Scan = ({ setCameraMode, cameraMode, goBack }) => {
         {/* Library View */}
         {tab === 'library' && (
           <div style={styles.libraryContainer}>
-            <label htmlFor="fileInput" style={styles.uploadBtn}>📁 Upload from Library</label>
+            <label htmlFor="fileInput" style={styles.uploadBtn}>📁 {lang.scanPage.uploadFromLibrary}</label>
             <input type="file" accept="image/*" id="fileInput" style={{ display: 'none' }} onChange={handleLibrarySelect} />
           </div>
         )}
@@ -125,21 +125,22 @@ const Scan = ({ setCameraMode, cameraMode, goBack }) => {
 
       {/* Bottom Tabs */}
       <div style={styles.bottomTabs}>
-        <button
-          onClick={() => setTab('camera')}
-          style={tab === 'camera' ? styles.activeTab : styles.inactiveTab}
-        >
-          Scan
-        </button>
+      <button
+        onClick={() => setTab('camera')}
+        style={tab === 'camera' ? styles.activeTab : styles.inactiveTab}
+      >
+        {lang.scanPage.scan}
+      </button>
 
-        <button
-          onClick={() => {
-            document.getElementById('fileInputTrigger').click();
-          }}
-          style={styles.inactiveTab}
-        >
-          Scan from Library
-        </button>
+      <button
+        onClick={() => {
+          document.getElementById('fileInputTrigger').click();
+        }}
+        style={styles.inactiveTab}
+      >
+        {lang.scanPage.scanFromLibrary}
+      </button>
+
 
         {/* Hidden file input always present */}
         <input

@@ -5,6 +5,8 @@ import Explore from './pages/Explore.jsx';
 import Scan from './pages/Scan.jsx';
 import Impact from './pages/Impact.jsx';
 import Account from './pages/Account.jsx';
+import Recipe from './pages/Recipe.jsx';
+
 import langDict from './utils/lang';
 
 import homeIcon from './utils/icons/home.png';
@@ -27,7 +29,7 @@ function App() {
   const renderPage = () => {
     const lang = langDict[language];
     switch (page) {
-      case 'home': return <Home lang={lang} />;
+      case 'home': return <Home lang={lang} setPage={setPage} />;
       case 'explore': return <Explore lang={lang} />;
       case 'scan': return (
         <Scan
@@ -39,6 +41,8 @@ function App() {
       );
       case 'impact': return <Impact lang={lang} />;
       case 'account': return <Account lang={lang} language={language} changeLang={changeLang} />;
+      case 'recipe': return <Recipe setPage={setPage} />;
+
       default: return <Home lang={lang} />;
     }
   };

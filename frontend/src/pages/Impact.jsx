@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import impactData from '../data/impactData.json'; // Adjust path if needed
+import impactData from '../data/impactData.json';
 
-const Impact = () => {
+const Impact = ({ lang }) => {
   const [fullData, setFullData] = useState([]);
   const [series, setSeries] = useState([
-    { name: 'Food Saved', data: [] },
-    { name: 'Food Waste', data: [] }
+    { name: lang.foodSaved, data: [] },
+    { name: lang.foodWaste, data: [] }
   ]);
   const [options, setOptions] = useState({
     chart: {
@@ -37,8 +37,8 @@ const Impact = () => {
       horizontalAlign: 'center'
     }
   });
-  const [activeRange, setActiveRange] = useState('1M'); // 🆕 default active 1M
-  const [fade, setFade] = useState(true); // 🆕 for fade animation
+  const [activeRange, setActiveRange] = useState('1M');
+  const [fade, setFade] = useState(true);
 
   useEffect(() => {
     const today = new Date();
@@ -48,7 +48,7 @@ const Impact = () => {
     });
     setFullData(filtered);
 
-    handleRangeChange('1M', filtered); // 🆕 initially show 1M
+    handleRangeChange('1M', filtered);
   }, []);
 
   const updateChart = (dataSubset) => {
@@ -57,8 +57,8 @@ const Impact = () => {
     const categories = dataSubset.map(item => item.date);
 
     setSeries([
-      { name: 'Food Saved', data: savedSeries },
-      { name: 'Food Waste', data: wasteSeries }
+      { name: lang.foodSaved, data: savedSeries },
+      { name: lang.foodWaste, data: wasteSeries }
     ]);
 
     setOptions(prev => ({
@@ -71,7 +71,7 @@ const Impact = () => {
   };
 
   const handleRangeChange = (range, customData = null) => {
-    setFade(false); // fade out before changing
+    setFade(false);
 
     setTimeout(() => {
       const today = new Date();
@@ -94,7 +94,7 @@ const Impact = () => {
         default:
           updateChart(fullData);
           setActiveRange(range);
-          setFade(true); // fade in
+          setFade(true);
           return;
       }
 
@@ -115,47 +115,37 @@ const Impact = () => {
 
       updateChart(filteredSubset);
       setActiveRange(range);
-      setFade(true); // fade in after change
-    }, 300); // Short fade delay
+      setFade(true);
+    }, 300);
   };
 
   return (
     <div style={{ padding: '1rem', flex: 1 }}>
       <h2 style={{ textAlign: 'center', color: '#ff6f61', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-        Your Food Impact 
-        {/* <span style={{
-          fontSize: '0.8rem',
-          background: '#00C851',
-          color: 'white',
-          borderRadius: '12px',
-          padding: '2px 8px',
-          animation: 'blinker 1.5s linear infinite'
-        }}>
-          LIVE
-        </span> */}
+        {lang.yourImpact}
       </h2>
 
       {/* Range Selector */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-        {['1M', '3M', '6M', '1Y', 'ALL'].map(label => (
-          <button
-            key={label}
-            onClick={() => handleRangeChange(label)}
-            style={{
-              padding: '0.4rem 0.8rem',
-              backgroundColor: activeRange === label ? '#ff6f61' : '#ffffff',
-              border: '1px solid #ff6f61',
-              borderRadius: '20px',
-              color: activeRange === label ? 'white' : '#ff6f61',
-              fontWeight: activeRange === label ? 'bold' : 'normal',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              transition: 'all 0.3s ease'
-            }}
-          >
-            {label}
-          </button>
-        ))}
+      {['1M', '3M', '6M', '1Y', 'ALL'].map(key => (
+        <button
+          key={key}
+          onClick={() => handleRangeChange(key)}
+          style={{
+            padding: '0.4rem 0.8rem',
+            backgroundColor: activeRange === key ? '#ff6f61' : '#ffffff',
+            border: '1px solid #ff6f61',
+            borderRadius: '20px',
+            color: activeRange === key ? 'white' : '#ff6f61',
+            fontWeight: activeRange === key ? 'bold' : 'normal',
+            cursor: 'pointer',
+            fontSize: '0.9rem',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          {lang.rangeLabels[key]}
+        </button>
+      ))}
       </div>
 
       {/* Chart or No Data Message */}
@@ -170,7 +160,7 @@ const Impact = () => {
             color: '#999',
             fontSize: '1.1rem'
           }}>
-            📭 No data available for this range.
+            📭 {lang.noData}
           </div>
         ) : (
           <ReactApexChart

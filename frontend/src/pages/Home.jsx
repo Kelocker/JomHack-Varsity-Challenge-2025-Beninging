@@ -5,9 +5,9 @@ import homeIcon from '../utils/icons/home.png';
 import exploreIcon from '../utils/icons/explore.png';
 import scanIcon from '../utils/icons/scan.png';
 import impactIcon from '../utils/icons/impact.png';
-import accountIcon from '../utils/icons/account.png';
+import locationIcon from '../utils/icons/location.png';
 
-const Home = ({ lang }) => {
+const Home = ({ lang, setPage }) => {
   const highlights = [
     { title: "Concert This Week 🎤", desc: "Expect a spike in late-night orders." },
     { title: "Burger Sales 🚀", desc: "Your burger sales increased by 20%!" },
@@ -48,17 +48,42 @@ const Home = ({ lang }) => {
         <span>Explore</span>
       </button>
       <button className="dashboard-btn">
-        <img src={accountIcon} alt="Account" className="dashboard-icon" />
-        <span>Account</span>
+        <img src={locationIcon} alt="Account" className="dashboard-icon" />
+        <span>Location</span>
       </button>
     </div>
   </div>
 
-
-  
-
-
+  <div style={{
+  marginTop: '2rem',
+  background: '#fff',
+  borderRadius: '10px',
+  padding: '1rem',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+  cursor: 'pointer'
+}} onClick={() => setPage('recipe')}>
+  <h3 style={{ fontWeight: 'bold', fontSize: '1.2rem', marginBottom: '0.5rem' }}>
+    🍽️ Recommended for Tomorrow
+  </h3>
+  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+    <img 
+      src="https://www.supermomix.com/wp-content/uploads/2018/03/diary-free-carbonara-1024x1024.jpg" 
+      alt="Spaghetti Carbonara" 
+      style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '10px' }}
+    />
+    <div>
+      <div style={{ fontWeight: 'bold' }}>Spaghetti Carbonara</div>
+      <div style={{ fontSize: '0.9rem', color: '#666' }}>Creamy pasta perfect for busy evenings.</div>
+    </div>
+  </div>
 </div>
+
+
+
+{/* https://www.supermomix.com/wp-content/uploads/2018/03/diary-free-carbonara-1024x1024.jpg */}
+
+
+  </div>
 
 
 

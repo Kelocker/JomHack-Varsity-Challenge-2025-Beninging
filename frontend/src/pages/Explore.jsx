@@ -2,20 +2,27 @@ import React, { useEffect, useState } from 'react';
 
 const Explore = () => {
   const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const res = await fetch('http://localhost:5000/explore'); // Adjust your backend URL if needed
+        const res = await fetch('http://localhost:5000/api/recipe');
         const data = await res.json();
         setRecipes(data.recipes || []);
       } catch (err) {
         console.error('Failed to fetch recipes:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchRecipes();
   }, []);
+
+  if (loading) {
+    return <div style={styles.loading}>Loading...</div>;
+  }
 
   return (
     <div style={styles.container}>
@@ -23,7 +30,7 @@ const Explore = () => {
         <div key={index} style={styles.card}>
           <img src={recipe.imageUrl} alt="Recipe" style={styles.image} />
           <div style={styles.description}>
-            <p>{recipe.discription}</p> {/* spelling follows your backend JSON */}
+            <p>{recipe.recipeDescription}</p>
           </div>
         </div>
       ))}
@@ -55,6 +62,12 @@ const styles = {
     textAlign: 'center',
     fontWeight: 'bold',
     color: '#333',
+  },
+  loading: {
+    marginTop: '2rem',
+    textAlign: 'center',
+    fontSize: '1.2rem',
+    color: '#666',
   }
 };
 
