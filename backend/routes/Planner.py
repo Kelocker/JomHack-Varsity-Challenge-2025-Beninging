@@ -32,7 +32,7 @@ class FoodItem:
             "category": self.category
         }
 
-def load_food_items_from_json(file_path="routes/example.json"):
+def load_food_items_from_json(file_path="summary_table.json"):
     try:
         with open(file_path, 'r') as file:
             food_items_data = json.load(file)
