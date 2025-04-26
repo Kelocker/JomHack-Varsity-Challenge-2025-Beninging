@@ -55,7 +55,7 @@ def save_data():
     data = request.json
 
     # Define the path to the example.json file
-    file_path = os.path.join(os.path.dirname(__file__), 'example.json')
+    file_path = os.path.join(os.path.dirname(__file__), 'summary_table.json')
 
     try:
         # Read the existing data from the file
