@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
   const [zoomOut, setZoomOut] = useState(false);
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({ foodName: '', quantity: '', measurement_unit: '', expiryDate: '' });
   const [addingNew, setAddingNew] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!isLoading) {
@@ -28,10 +30,29 @@ const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
   };
 
   const handleAddNewItem = () => {
+    if (newItem.foodName.trim() === '') {
+      alert('Please enter a food name.');
+      return;
+    }
     setItems([...items, { ...newItem }]);
     setNewItem({ foodName: '', quantity: '', measurement_unit: '', expiryDate: '' });
     setAddingNew(false);
   };
+
+  const saveAndBackHome = async () => {
+    setSaving(true);
+    try {
+      await axios.post('http://localhost:5000/api/saveData', { foodItems: items });
+      alert('Items saved successfully!');
+      goBackHome();
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('Failed to save items. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  };
+  
 
   return (
     <div style={{
@@ -60,15 +81,13 @@ const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
         overflow: 'visible',
         transition: 'all 1s ease',
         boxShadow: isLoading 
-            ? '0 0 25px rgba(252, 70, 107, 0.6), 0 0 45px rgba(173, 80, 168, 0.5)' 
-            : '0 4px 12px rgba(0,0,0,0.15)',
+          ? '0 0 25px rgba(252, 70, 107, 0.6), 0 0 45px rgba(173, 80, 168, 0.5)' 
+          : '0 4px 12px rgba(0,0,0,0.15)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         animation: isLoading ? 'colorPulse 12s ease-in-out infinite' : 'none',
       }}>
-        
-        {/* Scanned Image */}
         <img
           src={scannedImage}
           alt="Scanned"
@@ -80,8 +99,6 @@ const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
             borderRadius: '30px',
           }}
         />
-
-        {/* Glowing Layer */}
         {isLoading && (
           <div style={{
             position: 'absolute',
@@ -97,7 +114,7 @@ const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
         )}
       </div>
 
-      {/* Detected Items */}
+      {/* Items List */}
       {!isLoading && (
         <div style={{
           marginTop: '2rem',
@@ -112,11 +129,7 @@ const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
           alignItems: 'center',
           animation: 'fadeSlideUp 1s ease forwards',
         }}>
-          <h2 style={{
-            marginBottom: '1rem',
-            fontSize: '1.5rem',
-            color: '#333'
-          }}>
+          <h2 style={{ marginBottom: '1rem', fontSize: '1.5rem', color: '#333' }}>
             Detected Items
           </h2>
 
@@ -138,28 +151,37 @@ const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
                     value={item.foodName}
                     onChange={(e) => handleItemChange(index, 'foodName', e.target.value)}
                     placeholder="Food Name"
-                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-                  />
-                  <input
+                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '0.5rem', width: '100%' }}
+                    />
+                    <input
+                    type="text"
+                    value={item.category}
+                    onChange={(e) => handleItemChange(index, 'category', e.target.value)}
+                    placeholder="Category"
+                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '0.5rem', width: '100%' }}
+                    />
+                    <input
                     type="text"
                     value={item.quantity}
                     onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
                     placeholder="Quantity"
-                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-                  />
-                  <input
+                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '0.5rem', width: '100%' }}
+                    />
+                    <input
                     type="text"
                     value={item.measurement_unit}
                     onChange={(e) => handleItemChange(index, 'measurement_unit', e.target.value)}
                     placeholder="Measurement Unit"
-                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-                  />
-                  <input
+                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '0.5rem', width: '100%' }}
+                    />
+                    <input
                     type="date"
                     value={item.expiryDate}
                     onChange={(e) => handleItemChange(index, 'expiryDate', e.target.value)}
-                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-                  />
+                    placeholder="Expiry Date"
+                    style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '0.5rem', width: '100%' }}
+                    />
+
                   <button
                     onClick={() => handleDeleteItem(index)}
                     style={{
@@ -179,66 +201,73 @@ const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
               ))}
             </ul>
           ) : (
-            <p style={{ textAlign: 'center', color: '#666' }}>
-              No food items detected.
-            </p>
+            <p style={{ textAlign: 'center', color: '#666' }}>No food items detected.</p>
           )}
 
-          {/* Add New Item Section */}
+          {/* Add New Item */}
           <div style={{ marginTop: '2rem', width: '100%' }}>
-            {!addingNew ? (
-              <button
+          {!addingNew ? (
+            <button
                 onClick={() => setAddingNew(true)}
                 style={{
-                  width: '100%',
-                  backgroundColor: '#66bb6a',
-                  color: 'white',
-                  padding: '0.75rem',
-                  borderRadius: '8px',
-                  border: 'none',
-                  fontWeight: 'bold',
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                width: '100%',
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                padding: '0.75rem',
+                borderRadius: '8px',
+                border: 'none',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
                 }}
-              >
-                Add New Item
-              </button>
+            >
+                ➕ Add New Item
+            </button>
             ) : (
-              <>
-                <h3 style={{ marginTop: '1rem', marginBottom: '1rem' }}>New Item Details</h3>
+            <>
+                <h3 style={{ marginBottom: '0.5rem' }}>New Item</h3>
                 <input
-                  type="text"
-                  value={newItem.foodName}
-                  onChange={(e) => setNewItem({ ...newItem, foodName: e.target.value })}
-                  placeholder="Food Name"
-                  style={{ padding: '0.5rem', marginBottom: '0.5rem', width: '100%', borderRadius: '5px', border: '1px solid #ccc' }}
+                type="text"
+                value={newItem.foodName}
+                onChange={(e) => setNewItem({ ...newItem, foodName: e.target.value })}
+                placeholder="Food Name"
+                style={{ width: '100%', marginBottom: '0.5rem', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
                 />
                 <input
-                  type="text"
-                  value={newItem.quantity}
-                  onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
-                  placeholder="Quantity"
-                  style={{ padding: '0.5rem', marginBottom: '0.5rem', width: '100%', borderRadius: '5px', border: '1px solid #ccc' }}
+                type="text"
+                value={newItem.category}
+                onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
+                placeholder="Category"
+                style={{ width: '100%', marginBottom: '0.5rem', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
                 />
                 <input
-                  type="text"
-                  value={newItem.measurement_unit}
-                  onChange={(e) => setNewItem({ ...newItem, measurement_unit: e.target.value })}
-                  placeholder="Measurement Unit"
-                  style={{ padding: '0.5rem', marginBottom: '0.5rem', width: '100%', borderRadius: '5px', border: '1px solid #ccc' }}
+                type="text"
+                value={newItem.quantity}
+                onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
+                placeholder="Quantity"
+                style={{ width: '100%', marginBottom: '0.5rem', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
                 />
                 <input
-                  type="date"
-                  value={newItem.expiryDate}
-                  onChange={(e) => setNewItem({ ...newItem, expiryDate: e.target.value })}
-                  style={{ padding: '0.5rem', marginBottom: '0.5rem', width: '100%', borderRadius: '5px', border: '1px solid #ccc' }}
+                type="text"
+                value={newItem.measurement_unit}
+                onChange={(e) => setNewItem({ ...newItem, measurement_unit: e.target.value })}
+                placeholder="Measurement Unit"
+                style={{ width: '100%', marginBottom: '0.5rem', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
                 />
+                <input
+                type="date"
+                value={newItem.expiryDate}
+                onChange={(e) => setNewItem({ ...newItem, expiryDate: e.target.value })}
+                style={{ width: '100%', marginBottom: '0.5rem', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
+                />
+
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
                 <button
-                  onClick={handleAddNewItem}
-                  style={{
-                    width: '100%',
-                    backgroundColor: '#66bb6a',
+                    onClick={handleAddNewItem}
+                    style={{
+                    flex: 1,
+                    backgroundColor: '#4CAF50',
                     color: 'white',
                     padding: '0.75rem',
                     borderRadius: '8px',
@@ -247,38 +276,61 @@ const ScanResult = ({ scannedImage, groceryList, goBackHome, isLoading }) => {
                     fontSize: '1rem',
                     cursor: 'pointer',
                     boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                    marginTop: '1rem'
-                  }}
+                    }}
                 >
-                  Confirm Add
+                    Confirm
                 </button>
-              </>
+
+                <button
+                    onClick={() => {
+                    setAddingNew(false);
+                    setNewItem({ foodName: '', quantity: '', measurement_unit: '', expiryDate: '', category: '' });
+                    }}
+                    style={{
+                    flex: 1,
+                    backgroundColor: '#f44336',
+                    color: 'white',
+                    padding: '0.75rem',
+                    borderRadius: '8px',
+                    border: 'none',
+                    fontWeight: 'bold',
+                    fontSize: '1rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                    }}
+                >
+                    Cancel
+                </button>
+                </div>
+            </>
             )}
+
           </div>
 
-          {/* Back to Home */}
+          {/* Save and Back to Home Button */}
           <button
-            onClick={goBackHome}
+            onClick={saveAndBackHome}
+            disabled={saving}
             style={{
               marginTop: '2rem',
               width: '100%',
-              backgroundColor: '#ff6f61',
+              backgroundColor: saving ? '#ccc' : '#ff6f61',
               color: 'white',
               padding: '0.75rem',
               borderRadius: '8px',
               border: 'none',
               fontWeight: 'bold',
               fontSize: '1rem',
-              cursor: 'pointer',
+              cursor: saving ? 'not-allowed' : 'pointer',
               boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
             }}
           >
-            Back to Home
+            {saving ? 'Saving...' : 'Save and Back to Home'}
           </button>
         </div>
       )}
 
-      {/* CSS Animation */}
+      {/* Glowing Animation */}
       <style>
         {`
         @keyframes colorPulse {
