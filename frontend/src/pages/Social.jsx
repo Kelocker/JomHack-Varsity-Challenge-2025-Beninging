@@ -173,7 +173,7 @@ const styles = {
     border: '1px solid #fffff',
     borderRadius: '8px',
     fontSize: '1rem',
-    width: '450px',
+    width: '100%',
   },
   buttonFrame: {
     display: 'flex', 
