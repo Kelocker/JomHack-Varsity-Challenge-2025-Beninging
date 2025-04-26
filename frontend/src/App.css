@@ -17,7 +17,7 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-
+  position: relative;
   /* Firefox + Edge */
   scrollbar-width: thin;        /* make it super thin */
   scrollbar-color: transparent transparent; /* invisible track and thumb */
@@ -111,3 +111,8 @@ body {
   border-radius: 30px;
 }
 
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

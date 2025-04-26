@@ -5,16 +5,17 @@ import json
 
 from PIL import Image, UnidentifiedImageError
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import OpenAI 
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Now you can access your environment variables using os.environ
-os.environ['OPENAI_API_KEY'] = os.environ.get("API_KEY")
+# os.environ['OPENAI_API_KEY'] = os.environ.get("API_KEY")
+client = OpenAI(api_key=os.getenv("OPEN_AI_API"))
 
 # Initialize the OpenAI client
-client = OpenAI()
+# client = OpenAI()
 
 
 def image_to_food_list(file_path):

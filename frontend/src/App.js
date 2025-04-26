@@ -5,7 +5,7 @@ import Explore from './pages/Explore.jsx';
 import Scan from './pages/Scan.jsx';
 import Impact from './pages/Impact.jsx';
 import Account from './pages/Account.jsx';
-import Recipe from './pages/Recipe.jsx'; // ✅ add Recipe
+import Recipe from './pages/Recipe.jsx';
 
 import langDict from './utils/lang';
 
@@ -14,14 +14,18 @@ import exploreIcon from './utils/icons/explore.png';
 import scanIcon from './utils/icons/scan.png';
 import impactIcon from './utils/icons/impact.png';
 import accountIcon from './utils/icons/account.png';
+import ScanResult from './pages/ScanResult.jsx';
 
- // ✅ because extract_data uses axios
+
 
 function App() {
   const [page, setPage] = useState('home');
   const [prevPage, setPrevPage] = useState('home');
   const [language, setLanguage] = useState(localStorage.getItem('lang') || 'en');
   const [cameraMode, setCameraMode] = useState(false);
+  const [scannedImage, setScannedImage] = useState(null);
+  const [groceryList, setGroceryList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const changeLang = (newLang) => {
@@ -40,12 +44,24 @@ function App() {
           lang={lang}
           setCameraMode={setCameraMode}
           cameraMode={cameraMode}
+          setScannedImage={setScannedImage}
+          setGroceryList={setGroceryList}
+          setIsLoading={setIsLoading}
+          goToResult={() => setPage('scanResult')}
           goBack={() => setPage(prevPage)}
         />
       );
       case 'impact': return <Impact lang={lang} />;
       case 'account': return <Account lang={lang} language={language} changeLang={changeLang} />;
       case 'recipe': return <Recipe setPage={setPage} />;
+      case 'scanResult': return (
+        <ScanResult
+          scannedImage={scannedImage}
+          groceryList={groceryList}
+          isLoading={isLoading}
+          goBackHome={() => setPage('home')}
+        />
+      );
       default: return <Home lang={lang} />;
     }
   };
