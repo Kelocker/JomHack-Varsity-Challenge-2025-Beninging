@@ -1,0 +1,19 @@
+{
+    "tips": [
+        {
+            "item": "Apple",
+            "method": "Refrigerate in crisper drawer",
+            "reason": "Slows ripening by reducing ethylene production"
+        },
+        {
+            "item": "Sugar",
+            "method": "Store in an airtight container",
+            "reason": "Prevents clumping and moisture absorption"
+        },
+        {
+            "item": "Soy Sauce",
+            "method": "Keep in a cool, dark place",
+            "reason": "Preserves flavor and prevents spoilage"
+        }
+    ]
+}

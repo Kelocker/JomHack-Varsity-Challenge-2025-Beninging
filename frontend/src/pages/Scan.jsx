@@ -4,7 +4,7 @@ import scanIcon from '../utils/icons/camera.png';
 const Scan = ({ setCameraMode, cameraMode, goBack, lang }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const [tab, setTab] = useState('camera'); // camera | library
+  const [tab, setTab] = useState('camera');
   const [preview, setPreview] = useState(null);
   const [response, setResponse] = useState('');
 
