@@ -2,19 +2,18 @@ import os
 import base64
 import io
 import json
+import openai
 
 from PIL import Image, UnidentifiedImageError
 from dotenv import load_dotenv
-from openai import OpenAI
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Now you can access your environment variables using os.environ
-os.environ['OPENAI_API_KEY'] = os.environ.get("OPEN_AI_API")
+openai.api_key = os.getenv('OPEN_AI_API')
 
-# Initialize the OpenAI client
-client = OpenAI()
+
 
 
 def image_to_food_list(file_path):
@@ -127,8 +126,8 @@ def image_to_food_list(file_path):
     ]
 
     # Make the API Call
-    response = client.chat.completions.create(
-        model="gpt-4", 
+    response = openai.ChatCompletion.create(
+        model="gpt-4o", # Or use "gpt-4-turbo"
         messages=messages_payload,
         max_tokens=1000
     )

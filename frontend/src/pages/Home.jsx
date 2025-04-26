@@ -18,53 +18,19 @@ const Home = ({ lang, setPage }) => {
   ];
 
   const [msg, setMsg] = useState('');
-
-  const extract_data = async () => {
-    try {
-      const items = document.querySelectorAll('.summary-item');
-      if (!items.length) {
-        console.error('No summary items found!');
-        alert('No items to extract!');
-        return;
-      }
-  
-      const extractedData = Array.from(items).map(item => {
-        const foodName = item.querySelector('.food-name')?.textContent || '';
-        const detail = item.querySelector('.food-detail')?.textContent || '';
-        const category = item.querySelector('.category')?.textContent || '';
-  
-        const [expiryDateRaw, quantityRaw] = detail.split('@').map(str => str.trim());
-        let [quantity, unit] = quantityRaw.split(' ');
-        quantity = parseInt(quantity) || 0;
-        unit = unit || '';
-  
-        return {
-          foodName,
-          quantity,
-          measurementUnit: unit,
-          expiryDate: expiryDateRaw,
-          category
-        };
-      });
-  
-      console.log("Extracted data:", extractedData);
-  
-      const response = await axios.post('http://localhost:5000/api/extract', { data: extractedData });
-      console.log("Response from backend:", response.data);
-      alert(`Summary extracted successfully! Check console for details.`);
-  
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to extract summary');
-    }
-  };
-  
-  
+  const [foodItems, setFoodItems] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/hello')
       .then(response => setMsg(response.data.message))
-      .catch(error => console.error('Error:', error));
+      .catch(error => console.error('Error fetching hello:', error));
+
+    axios.get('http://localhost:5000/api/getIngredient')  // <-- Your real API endpoint for food items
+      .then(response => {
+        console.log('Fetched food items:', response.data);
+        setFoodItems(response.data);
+      })
+      .catch(error => console.error('Error fetching food items:', error));
   }, []);
 
   return (
@@ -130,33 +96,19 @@ const Home = ({ lang, setPage }) => {
         <div style={{ marginTop: '2rem' }}>
           <h1 style={{ textAlign: 'center', fontSize: '1.2rem', color: '#ff6f61' }}>{msg}</h1>
           <div className="summary-list">
-            <div className="summary-item">
-              <div className="summary-left">
-                <div className="food-name">Apple</div>
-                <div className="food-detail">2023-12-31 @ 10 -</div>
+            {foodItems.map((item, index) => (
+              <div className="summary-item" key={index}>
+                <div className="summary-left">
+                  <div className="food-name">{item.foodName}</div>
+                  <div className="food-detail">{item.expiryDate} @ {item.quantity} {item.measurementUnit || '-'}</div>
+                </div>
+                <div className="category">{item.category}</div>
               </div>
-              <div className="category">Fruit</div>
-            </div>
-
-            <div className="summary-item">
-              <div className="summary-left">
-                <div className="food-name">Sugar</div>
-                <div className="food-detail">2024-01-15 @ 50 gram</div>
-              </div>
-              <div className="category">Condiments</div>
-            </div>
-
-            <div className="summary-item">
-              <div className="summary-left">
-                <div className="food-name">Soy Sauce</div>
-                <div className="food-detail">2024-01-15 @ 500 ml</div>
-              </div>
-              <div className="category">Condiments</div>
-            </div>
+            ))}
           </div>
 
-          <button onClick={extract_data} className="extract-btn">
-            Extract Summary
+          <button onClick={() => setPage('manage')} className="extract-btn">
+            Manage
           </button>
         </div>
 
