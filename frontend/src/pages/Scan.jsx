@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import scanIcon from '../utils/icons/camera.png';
 
-const Scan = ({ setCameraMode, cameraMode, goBack, lang }) => {
+const Scan = ({ setCameraMode, cameraMode, goBack, lang, setScannedImage, setGroceryList, setIsLoading, goToResult  }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [tab, setTab] = useState('camera');
@@ -43,12 +43,17 @@ const Scan = ({ setCameraMode, cameraMode, goBack, lang }) => {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
+  
       const base64Image = canvas.toDataURL('image/jpeg');
-      setPreview(base64Image);
+  
+      setScannedImage(base64Image); // show immediately
+      setIsLoading(true);
+      goToResult();
+  
       sendToBackend(base64Image);
     }
   };
+  
 
   const sendToBackend = async (base64Image) => {
     try {
@@ -58,21 +63,62 @@ const Scan = ({ setCameraMode, cameraMode, goBack, lang }) => {
         body: JSON.stringify({ image: base64Image })
       });
       const data = await res.json();
+      
+      console.log("Backend Response:", data);
       setResponse(data.result || lang.scanPage.noItems);
+      setGroceryList(data.result || []);
     } catch (err) {
       console.error('Error sending image:', err);
       setResponse(lang.scanPage.error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // const sendToBackend = async (base64Image) => {
+  //   try {
+  //     setIsLoading(true);
+  
+  //     // 🔥 Simulate backend delay
+  //     await new Promise(resolve => setTimeout(resolve, 3000)); // 3 seconds fake delay
+  
+  //     // 🔥 After 3 sec, fake response
+  //     const fakeData = [
+  //       { foodName: "Banana", quantity: 1, measurement_unit: "pcs" },
+  //       { foodName: "Milk", quantity: 2, measurement_unit: "L" },
+  //       { foodName: "Chicken Breast", quantity: 1, measurement_unit: "kg" }
+  //     ];
+  
+  //     setGroceryList(fakeData);
+  //     setResponse(fakeData);
+  //   } catch (err) {
+  //     console.error('Simulated error:', err);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+  
+  
+  
 
   const handleLibrarySelect = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => sendToBackend(reader.result);
+      reader.onloadend = () => {
+        const base64Image = reader.result;
+  
+        setScannedImage(base64Image); // ✅ immediately show image
+        setIsLoading(true); // ✅ trigger loading state
+        goToResult(); // ✅ immediately go to scanResult page
+  
+        // Send to backend in background
+        sendToBackend(base64Image);
+      };
       reader.readAsDataURL(file);
     }
   };
+  
 
   useEffect(() => {
     setCameraMode(true); // <-- trigger full-screen mode
@@ -176,6 +222,7 @@ const styles = {
     color: '#ff6f61',
     fontFamily: "'Comic Sans MS', cursive, sans-serif", // matches app
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+    height: '60px',
   },
   backBtn: {
     fontSize: '1.5rem',
