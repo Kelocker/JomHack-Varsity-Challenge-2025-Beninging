@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from routes.FoodItem import recipe
+from routes.GetIngredients import ingredient
 from reccomendation.summary_table import store_summary_table
 from reccomendation.generate_recommendations import generate_recommendations
 
@@ -8,6 +9,7 @@ app = Flask(__name__)
 CORS(app)  # allow requests from React
 
 app.register_blueprint(recipe, url_prefix='/api')
+app.register_blueprint(ingredient, url_prefix='/api')
 
 @app.route('/api/extract', methods=['POST'])
 #run the store_summary_table function
