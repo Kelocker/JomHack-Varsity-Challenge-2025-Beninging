@@ -13,6 +13,13 @@ const Social = () => {
           placeholder="Search for food..."
           style={styles.searchInput}
         />
+        <button style={styles.filterButton}>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/107/107799.png" 
+            alt="Filter"
+            style={styles.filButton}
+          />
+        </button>
       </div>
       
       {/*Upload Post & View My Post*/}
@@ -67,9 +74,9 @@ const Social = () => {
             />
           </div>
         </div>
-        <div style={styles.infoRow}>
+        <div style={styles.desRow}>
           <span style={styles.label}>📝 Description: </span>
-          <span style={styles.value}>Whole wheat bread</span>
+          <span style={styles.value}>Freshly baked bread. Perfect for sandwiches, toast, or enjoying on its own. Available for sell of exchange.</span>
         </div>
         <div style={styles.infoRow}>
           <span style={styles.label}>🔢 Quantity: </span>
@@ -166,18 +173,7 @@ const styles = {
     border: '1px solid #fffff',
     borderRadius: '8px',
     fontSize: '1rem',
-    width: '450px',
-  },
-  filterButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
-    width: '24px', 
-    height: '24px'
-  },
-  filterIcon: {
-    width: '24px',
-    height: '24px',
+    width: '100%',
   },
   buttonFrame: {
     display: 'flex', 
@@ -191,6 +187,16 @@ const styles = {
     color: 'white', 
     border: 'none', 
     borderRadius: '5px' 
+  },
+  filterButton: {
+    padding: '10px', 
+    borderRadius: '5px', 
+    background: 'none', 
+    border: 'none',
+  },
+  filButton: {
+    width: '24px', 
+    height: '24px',
   },
 };
 

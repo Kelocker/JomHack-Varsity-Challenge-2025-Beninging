@@ -105,7 +105,7 @@ def get_recipe_from_chatgpt(ingredients, retries=2):
     for attempt in range(retries + 1):
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.7,
                 max_tokens=2000

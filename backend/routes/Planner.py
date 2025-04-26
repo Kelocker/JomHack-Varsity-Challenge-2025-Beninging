@@ -64,7 +64,7 @@ def ask_gpt_for_full_plan(food_items, people_count, meals_per_day=2, plan_days=4
 
         1. Predict in total how many days the food will last (overallDaysLeft) based on typical consumption and cooking rate.
         2. Provide the expected finish date.
-        3. Identify potential problems (like ingredients expiring before use) and suggest follow-up actions.
+        3. Identify potential problems (like ingredients expiring before use) and suggest follow-up actions, including using social features in our app to upload post and share or sell the food to nearby.
         4. Plan meals for the next {plan_days} days (only if ingredients still available), each day suggest {meals_per_day} meals.
 
         Return response in this JSON format:
@@ -98,7 +98,7 @@ def ask_gpt_for_full_plan(food_items, people_count, meals_per_day=2, plan_days=4
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7,
             max_tokens=3000
