@@ -6,6 +6,7 @@ import Scan from './pages/Scan.jsx';
 import Impact from './pages/Impact.jsx';
 import Account from './pages/Account.jsx';
 import Recipe from './pages/Recipe.jsx';
+import Social from './pages/Social.jsx';
 import Planner from './pages/Planner.jsx';
 
 import langDict from './utils/lang';
@@ -44,6 +45,7 @@ function App() {
       case 'account': return <Account lang={lang} language={language} changeLang={changeLang} />;
       case 'recipe': return <Recipe setPage={setPage} />;
       case 'planner': return <Planner lang={lang} setPage={setPage} />;
+      case 'social': return <Social lang={lang} setPage={setPage}/>;
 
 
       default: return <Home lang={lang} />;

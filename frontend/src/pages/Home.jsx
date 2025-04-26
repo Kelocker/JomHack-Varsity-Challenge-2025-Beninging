@@ -36,20 +36,20 @@ const Home = ({ lang, setPage }) => {
   <div className="dashboard-card">
     <div className="dashboard-buttons">
       <button className="dashboard-btn">
-        <img src={impactIcon} alt="Impact" className="dashboard-icon" />
-        <span>Impact</span>
+        <img src={homeIcon} alt="Impact" className="dashboard-icon" />
+        <span>Home</span>
       </button>
       <button className="dashboard-btn" onClick={() => setPage('planner')}>
-        <img src={homeIcon} alt="Home" className="dashboard-icon" />
-        <span>Home</span>
+        <img src={impactIcon} alt="Home" className="dashboard-icon" />
+        <span>Planner</span>
       </button>
       <button className="dashboard-btn">
         <img src={exploreIcon} alt="Explore" className="dashboard-icon" />
         <span>Explore</span>
       </button>
-      <button className="dashboard-btn">
+      <button className="dashboard-btn" onClick={() => setPage('social')}>
         <img src={locationIcon} alt="Account" className="dashboard-icon" />
-        <span>Location</span>
+        <span>Nearby</span>
       </button>
     </div>
   </div>
