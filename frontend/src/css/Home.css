@@ -1,0 +1,59 @@
+.dashboard-panel {
+    background-color: #ff6f61; 
+    border-bottom-left-radius: 36px;
+    border-bottom-right-radius: 36px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 0 1rem;
+    margin: -50px auto 0; /* 💥 float upwards */
+    width: 80%; /* or 90%, adjust as you like */
+    color: white;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.20);
+}
+
+
+.dashboard-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap; /* in case screen small */
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .dashboard-btn {
+    background-color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .dashboard-btn span {
+    margin-top: 0.3rem;
+    font-size: 0.7rem;
+    color: #333;
+  }
+  
+  .dashboard-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
