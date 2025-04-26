@@ -39,7 +39,7 @@ const Home = ({ lang, setPage }) => {
         <img src={impactIcon} alt="Impact" className="dashboard-icon" />
         <span>Impact</span>
       </button>
-      <button className="dashboard-btn">
+      <button className="dashboard-btn" onClick={() => setPage('planner')}>
         <img src={homeIcon} alt="Home" className="dashboard-icon" />
         <span>Home</span>
       </button>
