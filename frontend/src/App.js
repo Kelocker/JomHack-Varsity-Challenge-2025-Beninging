@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Home from './pages/Home.jsx';
 import Explore from './pages/Explore.jsx';
@@ -17,17 +17,21 @@ import scanIcon from './utils/icons/scan.png';
 import impactIcon from './utils/icons/impact.png';
 import accountIcon from './utils/icons/account.png';
 
+ // ✅ because extract_data uses axios
+
 function App() {
   const [page, setPage] = useState('home');
-  const [prevPage, setPrevPage] = useState('home'); // 🧠 track where user came from
+  const [prevPage, setPrevPage] = useState('home');
   const [language, setLanguage] = useState(localStorage.getItem('lang') || 'en');
   const [cameraMode, setCameraMode] = useState(false);
+
 
   const changeLang = (newLang) => {
     setLanguage(newLang);
     localStorage.setItem('lang', newLang);
   };
 
+  
   const renderPage = () => {
     const lang = langDict[language];
     switch (page) {
@@ -38,7 +42,7 @@ function App() {
           lang={lang}
           setCameraMode={setCameraMode}
           cameraMode={cameraMode}
-          goBack={() => setPage(prevPage)} // 🧠 pass goBack logic
+          goBack={() => setPage(prevPage)}
         />
       );
       case 'impact': return <Impact lang={lang} />;
@@ -60,12 +64,13 @@ function App() {
         </header>
       )}
 
-      {/* Page Content */}
-      <div style={{ flex: 1, overflow: cameraMode ? 'hidden' : 'auto', padding: cameraMode  }}>
+      <div style={{ flex: 1, overflow: cameraMode ? 'hidden' : 'auto', padding: cameraMode}}>
         {renderPage()}
+
+
+        
       </div>
 
-      {/* Bottom Tab Bar – hidden during camera */}
       {!cameraMode && (
         <nav className="tab-bar">
           <button onClick={() => setPage('home')}>
@@ -76,7 +81,7 @@ function App() {
           </button>
           <button
             onClick={() => {
-              setPrevPage(page); // 🧠 record current page before going to scan
+              setPrevPage(page);
               setPage('scan');
             }}
             className="scan-btn"
