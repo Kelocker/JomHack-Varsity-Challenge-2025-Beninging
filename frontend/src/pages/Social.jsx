@@ -14,9 +14,10 @@ const Social = () => {
           style={styles.searchInput}
         />
         <button style={styles.filterButton}>
-          <img 
+          <img
             src="https://cdn-icons-png.flaticon.com/512/107/107799.png" 
             alt="Filter"
+            style={styles.filButton}
           />
         </button>
       </div>
@@ -41,7 +42,7 @@ const Social = () => {
         </div>
         <div style={styles.desRow}>
           <span style={styles.label}>📝 Description: </span>
-          <span style={styles.value}>Organically grownffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</span>
+          <span style={styles.value}>Farm-fresh eggs with rich, flavorful yolks. Great for cooking, baking, or a hearty breakfast.</span>
         </div>
         <div style={styles.infoRow}>
           <span style={styles.label}>🔢 Quantity: </span>
@@ -73,9 +74,9 @@ const Social = () => {
             />
           </div>
         </div>
-        <div style={styles.infoRow}>
+        <div style={styles.desRow}>
           <span style={styles.label}>📝 Description: </span>
-          <span style={styles.value}>Whole wheat bread</span>
+          <span style={styles.value}>Freshly baked bread. Perfect for sandwiches, toast, or enjoying on its own. Available for sell of exchange.</span>
         </div>
         <div style={styles.infoRow}>
           <span style={styles.label}>🔢 Quantity: </span>
@@ -174,17 +175,6 @@ const styles = {
     fontSize: '1rem',
     width: '450px',
   },
-  filterButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
-    width: '24px', 
-    height: '24px'
-  },
-  filterIcon: {
-    width: '24px',
-    height: '24px',
-  },
   buttonFrame: {
     display: 'flex', 
     gap: '10px', 
@@ -197,6 +187,16 @@ const styles = {
     color: 'white', 
     border: 'none', 
     borderRadius: '5px' 
+  },
+  filterButton: {
+    padding: '10px', 
+    borderRadius: '5px', 
+    background: 'none', 
+    border: 'none',
+  },
+  filButton: {
+    width: '24px', 
+    height: '24px',
   },
 };
 
