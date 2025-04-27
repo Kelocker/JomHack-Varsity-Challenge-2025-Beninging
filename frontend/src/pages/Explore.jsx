@@ -49,7 +49,7 @@ const Explore = () => {
         <div key={index} style={styles.card} onClick={() => setSelectedRecipe(recipe)}>
           <img src={recipe.imageUrl} alt="Recipe" style={styles.image} />
           <div style={styles.description}>
-            <div style={styles.title}>{recipe.recipeTitle || "Delicious Recipe"}</div>
+            <div style={styles.title}>{recipe.recipeName || "Delicious Recipes"}</div>
             <div style={styles.subtitle}>{recipe.recipeDescription}</div>
           </div>
         </div>
