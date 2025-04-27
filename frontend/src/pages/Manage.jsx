@@ -30,7 +30,7 @@ const Manage = ({ setPage }) => {
                 id: index + 1,
                 foodName: item.foodName,
                 quantity: item.quantity,
-                measurementUnit: item.measurementUnit || '',
+                measurementUnit: item.measurement_unit || '',
                 expiryDate: item.expiryDate,
                 category: item.category
             }));

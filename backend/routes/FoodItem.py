@@ -32,7 +32,7 @@ class FoodItem:
         return {
             "foodName": self.food_name,
             "quantity": self.quantity,
-            "measurementUnit": self.measurement_unit,
+            "measurement_unit": self.measurement_unit,
             "expiryDate": self.expiry_date,
             "category": self.category
         }
@@ -45,7 +45,7 @@ def load_food_items_from_json(file_path="summary_table.json"):
                 FoodItem(
                     item["foodName"],
                     item["quantity"],
-                    item["measurementUnit"],
+                    item["measurement_unit"],
                     item["expiryDate"],
                     item["category"]
                 ) for item in food_items_data.get("data", [])
@@ -108,7 +108,7 @@ def get_recipe_from_chatgpt(ingredients, retries=2):
                 model="gpt-4",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.7,
-                max_tokens=2000
+                max_tokens=5000
             )
 
             recipe_info = response.choices[0].message['content'].strip()

@@ -28,12 +28,12 @@ class FoodItem:
         return {
             "foodName": self.food_name,
             "quantity": self.quantity,
-            "measurementUnit": self.measurement_unit,
+            "measurement_unit": self.measurement_unit,
             "expiryDate": self.expiry_date,
             "category": self.category
         }
 
-def load_food_items_from_json(file_path="routes/example.json"):
+def load_food_items_from_json(file_path="summary_table.json"):
     try:
         with open(file_path, 'r') as file:
             food_items_data = json.load(file)
@@ -41,7 +41,7 @@ def load_food_items_from_json(file_path="routes/example.json"):
                 FoodItem(
                     item["foodName"],
                     item["quantity"],
-                    item["measurementUnit"],
+                    item["measurement_unit"],
                     item["expiryDate"],
                     item["category"]
                 ) for item in food_items_data.get("data", [])

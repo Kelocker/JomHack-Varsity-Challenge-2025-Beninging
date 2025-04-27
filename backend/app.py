@@ -32,6 +32,19 @@ def get_recommendations():
     recommendations = generate_recommendations(food_items)
     #return recommendations
 
+@app.route('/api/getIngredient', methods=['GET'])
+def get_ingredients():
+    try:
+        # Try to load data from summary_table.json
+        with open('summary_table.json', 'r') as file:
+            data = json.load(file)
+            print(data)
+            return jsonify(data.get('data', []))
+            
+    except Exception as e:
+        print(f"Error loading summary_table.json: {e}")
+        return jsonify([]), 500
+    
 
 # Handle scan uploads
 @app.route('/scan', methods=['POST'])
